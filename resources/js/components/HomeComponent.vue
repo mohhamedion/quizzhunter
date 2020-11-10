@@ -78,7 +78,7 @@
 
                 <div class="container">
                     <div class="row">
-                          <div class="col-6 text-center rtl">
+                          <div class="col-md-6 text-center rtl">
                             <img
                                 class="width100"
                                 src="https://www.flaticon.com/premium-icon/icons/svg/3130/3130726.svg"
@@ -91,7 +91,7 @@
                             </p>
                         </div>
 
-                        <div class="col-6 text-center">
+                        <div class="col-md-6 text-center">
                             <img
                                 class="width100"
                                 src="/vectors/checklist.png"
@@ -133,7 +133,7 @@
 
             <div class="container mt-5">
                 <div class="row">
-                    <div class="ml-4" v-for="test in bestfive" :key="test.id">
+                    <div class="ml-4 " v-for="test in bestfive" :key="test.id">
                         <test-card :test="test"  ></test-card>
                     </div>
                    

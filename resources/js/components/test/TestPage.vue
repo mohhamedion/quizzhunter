@@ -147,9 +147,9 @@ li {
                             <button class="btn testBtn form-control   mb-1" v-on:click="createTestSession">
                                 <p class="text-light">اختبر الان</p> 
                             </button>
-                            <button class="btn btn-success form-control mb-1">
+                            <!-- <button class="btn btn-success form-control mb-1">
                                 Example
-                            </button>
+                            </button> -->
                         </div>
                     </div>
                 </div>

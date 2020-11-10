@@ -14,19 +14,21 @@
             <div class="col-4  ">
                 <div class="bg-light p-3 border">
                     <div class="form-group">
-                        <select name="" id="" class="form-control">
-                            <option selected='selected' disabled='disabled' >Level</option>
-                            <option value="" v-for="level in getLevels" :key="level.id">{{level.level}}</option>
+                        <select name="" id="" class="form-control" v-model="search.level" @change="getAllTests" >
+                                 <option disabled selected value="null"  >Level</option  >
+                            <option value="" v-for="level in getLevels" :key="level.id" v-bind:value="level.id">{{level.level}}</option>
                     
                         </select>
                     </div>
                     <div class="form-group">
-                        <select name="" id="" class="form-control">
-                            <option selected='selected' disabled='disabled' >Category</option>
+                        <select name="" id="" class="form-control" v-model="search.category" @change="getAllTests">
+                                 <option disabled selected value="null"  >Category</option  >
 
                             <option
                                 v-for="category in getCategories"
                                 :key="category.id"
+                                :value="category.id"
+                                v-bind:value="category.id"
                                 >{{ category.category }}</option
                             >
                         </select>
@@ -45,14 +47,21 @@ export default {
         return {
             tests: [
         
-            ]
+            ],
+            search:{
+                level:null,
+                category:null
+            }
         };
     },
     methods: {
         ...mapActions("categories", ["getHttpCategories"]),
         ...mapActions("levels", ["getHttpLevels"]),
         getAllTests(){
-            axios.get('http://localhost:8000/api/tests').then(response=>{
+
+            axios.get(`http://localhost:8000/api/tests?level=${this.search.level}&category=${this.search.category}`,{
+               
+            }).then(response=>{
                     this.tests = response.data;
                     console.log(this.tests)
             })

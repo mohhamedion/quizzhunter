@@ -25,19 +25,27 @@ class QuestionController extends Controller
 
         $validator = Validator::make($request->all(), [ 
             'question'=>'required|max:255',
-            'test_id'=>'required|int|max:255',
+            'test_id'=>'required|int',
             'answers'=>'required|array|min:2'
          ]);
         if($validator->fails()){
-            return response()->json(['error'=>$validator->errors()], 401);
+            return response()->json(['error'=>$validator->errors()], 200);
         
         }
 
         $test = Test::find($request->test_id)->where('user_id',Auth::user('api')->id);
         if(!$test){
             return response()->json(['error'=>'error'], 401);
- 
         }
+        
+        
+        if($this->ifCorrectAnswersDontExist($request->answers)){
+
+            return response()->json(['error'=> ['answers'=>['اجابة صحيحة واحدة على الاقل']] ], 200);
+        
+        }
+
+
         $question = $request->post();
         $question['user_id'] = Auth::user('api')->id;
         $question = Question::create($question);
@@ -48,7 +56,17 @@ class QuestionController extends Controller
 
     }
 
+    private function ifCorrectAnswersDontExist($answers){
+        $notExist = true;
+         foreach($answers as $answer){
+            if($answer['correct']){
+                 $notExist=false;
+            }
+        }
 
+        return $notExist;
+    }   
+    
     public function deleteQuestion($question_id){
 
      $question=   Question::where('id',$question_id)->get()->last();

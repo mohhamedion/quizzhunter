@@ -59,6 +59,11 @@
         <navigator></navigator>
 
         <router-view></router-view>
+        <notifications 
+        group="errors"
+         position="bottom right"
+         />
+
     </div>
 </template>
 
@@ -71,7 +76,6 @@ export default {
 		
 	},
 	mounted(){
-        console.log(env)
 		if(localStorage.getItem('authToken')){
 			this.getUserData();
 		}

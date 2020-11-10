@@ -38,12 +38,16 @@
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
+
+.ltr{
+    direction: ltr;
+}
 </style>
 <template>
     
-<div class="container">
-    <h3 class="mt-3">
-        РЕЗУЛЬТАТ ТЕСТА "{{test.category.category}}: {{test.level}}"
+<div class="container rtl">
+    <h3 class="mt-3 text-right">
+        "{{test.category.category}}: {{test.level.level}}" نتائج الاختبار
     </h3>
     <div class="mt-4  text-white" :class="resultClass">
             <h2 class="text-center p-5">{{resultText}}</h2>
@@ -51,14 +55,16 @@
 
 <transition name="fade">
 
-    <div id='rateTest' class="text-center" v-if="showRating">
-            <h2>how did you find the test?</h2>
+    <div id='rateTest' class="text-center ltr" v-if="showRating">
+            <h2>ماهو تقييمك لهذا الاختبار؟</h2>
+             <p><i class="text-secondary">الرجاء التقييم على اساس جودة الاسألة وصحتها, وليس على اساس نتيجة اختبارك</i></p>
+           
          <span class="fa fa-star h3 pointer " @mouseover="rateHover(rate)" @mouseleave="rateHover(0)" :class=" rate<=rateHoverIndex  ? 'checked' : '' " v-for="rate in 5" v-on:click="rateTest(rate)" :key="rate" ></span>
     </div>
 </transition>
 
-    <h3>
-        РЕЗУЛЬТАТЫ
+    <h3 class="text-right">
+        النتائج
     </h3>
 
     <div class="row">
@@ -77,8 +83,8 @@
     </div>
 
 
-    <h3 class="mt-4">
-        ANSWERS
+    <h3 class="mt-4 text-right">
+        أجوبتك
     </h3>
 
     <div class="mt-5" v-for="sessionQuestion in questions" :key="sessionQuestion.id">
@@ -115,7 +121,7 @@ export default {
             resultText:null,
             marks:0,
             percent:0,
-            points:15,
+            points:0,
             showRating:false,
             rateHoverIndex:0
 
@@ -137,14 +143,16 @@ export default {
         countPoints(){
             this.marks =this.questions.map(el=>el.mark).reduce((x,y)=>{return x+y}) || 0;
             this.percent = (this.marks * 100)/this.questions.length;
+            this.points = this.marks/2;
+
         },
         giveTheResult(){
             if(this.percent<50){
                 this.resultClass = "fail";
-                this.resultText="YOU DID NOT PASS :(";
+                this.resultText="لم تنجح في الاختبار:(";
             }else{
                 this.resultClass = "passed";
-                this.resultText="you pass :)";
+                this.resultText="انجزت الاختبار بنجاح :)";
 
             }
         },

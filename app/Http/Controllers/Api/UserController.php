@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Validator;
 use Hash;
-use App\Models\User;
+use App\Models\User; 
+use App\Models\TestSession;
+use Illuminate\Support\Facades\DB;
+
 class UserController extends Controller
 {
     //
@@ -62,9 +65,20 @@ class UserController extends Controller
 
 
         public function show($user_id){
-            return response()->json(User::where('id',$user_id)->with('tests.category')->with('tests.user')->get()->last());
-        }
+            $user = User::where('id',$user_id)
+            ->with('tests.category')
+            ->with('tests.user')
+            ->get()->last();
 
+            $user['test_sessions'] =TestSession::select(DB::Raw("*,  (select sum(mark)  from session_questions where session_questions.session_id=test_sessions.id ) as totalPoints"))
+            ->where('user_id',$user_id)
+            ->with('test.category')->withCount('sessionQuestions')
+            ->get();
+            return response()->json($user);
+
+
+        }
+        
     }
 
 

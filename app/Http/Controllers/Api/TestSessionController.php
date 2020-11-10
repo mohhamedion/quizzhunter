@@ -31,7 +31,7 @@ class TestSessionController extends Controller
         })
         ->with('sessionQuestions.sessionAnswers')
         ->with('sessionQuestions.question.answers')
-        ->with('test.category')->with('mark')
+        ->with('test.category')->with('test.level')->with('mark')
         ->get()->last();
         $showRate = false;
         if($request->user('api')&&$request->user('api')->id==$sessionResult->user_id){

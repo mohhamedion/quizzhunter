@@ -19,12 +19,23 @@ class TestController extends Controller
     //
 
 
-    public function index(){
+    public function index(Request $request){
      
 
-        return response()->json(Test::select(DB::raw("*,(select sum(test_rate.rate) from test_rate where test_rate.test_id=tests.id) as totalRate"))->where("published",1)->with('level')->with('user')->with('category')->get());
+                $result= Test::select(DB::raw("*,(select sum(test_rate.rate) from test_rate where test_rate.test_id=tests.id) as totalRate"))
+                ->where("published",1)
+                ->with('level')
+                ->with('user')
+                ->with('category');
 
+                if($request->level>0){
+                    $result = $result->where('level',$request->level);
+                }
+                if($request->category>0){
+                    $result = $result->where('category',$request->category);
+                }
 
+                return response()->json($result->get());
     }
 
 
@@ -93,7 +104,7 @@ class TestController extends Controller
     }
 
     public function getDraftTestsById($test_id){
-        $test = Test::where("user_id",Auth::user('api')->id)->where("id",$test_id)->where('published',0)->with('category')->with('questions.answers')->get();
+        $test = Test::where("user_id",Auth::user('api')->id)->where("id",$test_id)->where('published',0)->with('level')->with('category')->with('questions.answers')->get();
         return response()->json($test);        
     }
    public function deleteDraftTest($test_id){

@@ -54,7 +54,7 @@ body {
        </div> -->
 
             <div id="question">
-                <p class="lightfont">question 1/10</p>
+                <p class="lightfont">question {{currentQuestion+1}}/{{sessionQuestions.length}}</p>
                <p class="font175">{{sessionQuestions[currentQuestion].question.question}}</p>
 
                 <div class="code" v-if="sessionQuestions[currentQuestion].question.code">

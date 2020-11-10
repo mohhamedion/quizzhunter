@@ -43,7 +43,7 @@ a {
                                         e.target.classList.remove('lineButtom');
                                     }
                                 "
-                                >Test Results</span
+                                >النشاط الاخير</span
                             ></router-link
                         >
                         <router-link :to="{ name: 'createdTests' }">
@@ -59,7 +59,7 @@ a {
                                         e.target.classList.remove('lineButtom');
                                     }
                                 "
-                                >created tests</span
+                                >اختباراتي</span
                             >
                         </router-link>
                     </div>
@@ -68,6 +68,7 @@ a {
                     <router-view
                         :key="$route.path"
                         :tests="tests"
+                        :sessions="sessions"
                     ></router-view>
                     <!-- 
                                                  <div class="col-12  ">
@@ -89,7 +90,8 @@ export default {
     data() {
         return {
             user: {},
-            tests: []
+            tests: [],
+            sessions:[]
         };
     },
     methods: {
@@ -100,6 +102,7 @@ export default {
             );
             this.user = response.data;
             this.tests = response.data.tests;
+            this.sessions = response.data.test_sessions;
         }
     },
 

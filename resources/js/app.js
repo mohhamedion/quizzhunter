@@ -11,7 +11,8 @@ import router from './router/router';
 import Testcard from './components/testcard/Testcard.vue';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
-  
+import Notifications from 'vue-notification'
+Vue.use(Notifications)
 Vue.use(VueAxios, axios);
 Vue.use(VueRouter);
 

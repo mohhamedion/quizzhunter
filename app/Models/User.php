@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\Test;
+use App\Models\TestSession;
 
 class User extends Authenticatable
 {
@@ -49,4 +50,9 @@ class User extends Authenticatable
     public function tests(){
         return $this->hasMany(Test::class,'user_id');
     }
+
+    public function testSessions(){
+        return $this->hasMany(TestSession::class,'user_id');
+    }
+
 }

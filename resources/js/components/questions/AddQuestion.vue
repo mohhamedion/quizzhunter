@@ -9,13 +9,15 @@
 
 <template>
     <div class="container mt-2 ">
-        <h2 class="lightfont">Test</h2>
+        <h2 class="lightfont text-right">الأختبار </h2>
         <div class="bg-white  form-inline p-3 shadowBox mb-2">
             <li class="col-4">{{test.category.category}}</li>
             <li class="col-2">{{test.level.level}}</li>
+            <li class="col-4">{{test.created_at}}</li>
+            <li class="col-2">{{test.second_per_question}}s</li>
         </div>
 
-        <div id="add" class="  shadowBox p-3 text-right rtl">
+        <div id="add" class="shadowBox p-3 text-right rtl">
             <h2 class="lightfont">أضف  سؤالا</h2>
             <div class="form-group">
                 <textarea
@@ -23,11 +25,11 @@
                     id=""
                     cols="30"
                     rows="3"
-                    class="form-control"
+                    class="form-control "
                     placeholder="مثال: ماهو الوسم الخاص بجسم الصفحة في html"
                     v-model="form.question"
-                ></textarea>
-              
+                 ></textarea>
+                
             </div>
 
             <div class="form-group">
@@ -52,7 +54,8 @@
                     type="text"
                     class="form-control"
                     v-model="dataHandler.answer"
-                />
+                 />
+                 
                 <div class="text-right pt-2">
                     <button class="btn btn-danger" v-on:click="addAnswer">
                         اضف جواب
@@ -64,6 +67,7 @@
                 class="bg-white p-3 shadowBox mb-2 "
                 v-for="answer in form.answers"
                 :key="answer.id"
+
             >
                 <div class="row">
                     <li class="col-8">{{ answer.answer }}</li>
@@ -125,7 +129,7 @@
 
         <div>
             <div class="form-group">
-                <div class="text-right pt-2">
+                <div class="text-left pt-2">
                     <button class="btn btn-success" v-on:click="publishTest">أطلق الاختبار</button>
                 </div>
             </div>
@@ -150,12 +154,33 @@ export default {
             test:{
                 category:{category:null},
                 level:null
-            }
+            },
+         
         };
     },
     methods: {
-        createQuestion() {
+   
+        handleError(error){
+            let errors = Object.values(error);
+            console.log(errors)
+            let DomError = "";
+                for((error) in errors){
+                    DomError+="<li>"+errors[error]+"</li>";
+                }
 
+
+             this.$notify({
+                    group: 'errors',
+                    title: 'خطأ',
+                    text: DomError,
+                    type: 'error',
+                    position:"bottom right"
+
+                });
+        },
+
+        createQuestion() {
+           
             axios
                 .post("http://localhost:8000/api/questions", {
                     question: this.form.question,
@@ -164,9 +189,16 @@ export default {
                     test_id: this.$route.params.test_id
                 })
                 .then(response => {
-                    this.addQuestion(response.data[0])
+                    if(response.data.error){
+                            this.handleError(response.data.error);
+                    }else{
+                        this.addQuestion(response.data[0])
+                        this.clearFormData();
+
+                    }
                 });
-            this.clearFormData();
+
+               
         },
         clearFormData() {
             this.form = {
